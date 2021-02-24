@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" th:src="@{/echarts/echarts.min.js}"></script>
+    <script type="text/javascript" th:src="@{/echarts/china.js}"></script>
+</head>
+<body>
+    <div id="main" style="width: 1000px;height:700px;"></div>
+    <script th:inline="javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var dataMapStr1 = [[${dataMap1}]];
+        var dataMapStr2 = [[${dataMap2}]];
+
+        option = {
+            title : {
+                text: '国内疫情地图',
+                subtext: '纯属虚构',
+                left: 'center'
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data:['现有确诊','累计确诊']
+            },
+            visualMap: {
+                type:'piecewise',
+                pieces:[
+                    {min:1000,max:1000000,label:'1000人以上',color:'#ff2736'},
+                    {min:500,max:999,label:'500-999人',color:'#ff6341'},
+                    {min:100,max:499,label:'100-499人',color:'#ffa577'},
+                    {min:10,max:99,label:'10-99人',color:'#ffcea0'},
+                    {min:0,max:9,label:'0-9人',color:'#e2ebf4'},
+                ],
+                calculable : true
+            },
+            toolbox: {
+                show: true,
+                orient : 'vertical',
+                left: 'right',
+                top: 'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            series : [
+                {
+                    name: '现有确诊',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,
+                    label: {
+                        normal: {
+                            show: true,
+                            position:'center',
+                            textStyle:{
+                                color:'rgba(0,0,0,0.4)'
+                            }
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    data:JSON.parse(dataMapStr1)
+                },
+                {
+                    name: '累计确诊',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,
+                    label: {
+                        normal: {
+                            show: true,
+                            position:'center',
+                            textStyle:{
+                                color:'rgba(0,0,0,0.4)'
+                            }
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    data:JSON.parse(dataMapStr2)
+                }
+            ]
+
+        }
+
+        myChart.setOption(option);
+    </script>
+
+</body>
+</html>
